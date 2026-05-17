@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abang Perhiasan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body{
+            background:
+                linear-gradient(
+                    rgba(10,10,30,0.65),
+                    rgba(10,10,30,0.75)
+                ),
+                url('Aset/bg.jpg');
+
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* ===== PIRING 3D ===== */
+        .plate {
+            position: relative;
+            border-radius: 9999px;
+
+            /* Warna dasar piring */
+            background:
+                radial-gradient(circle at 30% 30%, #ffffff 0%, #f5f5f5 25%, #d6d6d6 60%, #a1a1a1 100%);
+
+            /* Efek kedalaman */
+            box-shadow:
+                inset -8px -8px 15px rgba(255,255,255,0.7),
+                inset 8px 8px 18px rgba(0,0,0,0.25),
+                0 15px 30px rgba(0,0,0,0.45),
+                0 5px 10px rgba(255,255,255,0.15);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: all 0.3s ease;
+        }
+
+        /* Pantulan cahaya atas */
+        .plate::before {
+            content: "";
+            position: absolute;
+            top: 12%;
+            left: 18%;
+            width: 55%;
+            height: 28%;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            filter: blur(6px);
+        }
+
+        /* Bayangan bawah */
+        .plate::after {
+            content: "";
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 25px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.35);
+            filter: blur(12px);
+            z-index: -1;
+        }
+
+        /* Bagian dalam piring */
+        .plate-inner {
+            width: 78%;
+            height: 78%;
+            border-radius: 9999px;
+
+            background:
+                radial-gradient(circle at 30% 30%, #ffffff 0%, #ececec 40%, #cfcfcf 100%);
+
+            box-shadow:
+                inset 5px 5px 12px rgba(0,0,0,0.15),
+                inset -5px -5px 12px rgba(255,255,255,0.8);
+
+            position: relative;
+
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px;
+            overflow: hidden;
+        }
+        
+        /* ===== PIRING SOFT METALLIC ===== */
+        .plate-final {
+            position: relative;
+            border-radius: 9999px;
+
+            background:
+                radial-gradient(circle at 30% 30%,
+                #f8f8f8 0%,
+                #e8e8e8 20%,
+                #d2d2d2 45%,
+                #b5b5b5 70%,
+                #9a9a9a 100%);
+
+            box-shadow:
+                inset -5px -5px 10px rgba(255,255,255,0.75),
+                inset 5px 5px 12px rgba(0,0,0,0.12),
+                0 12px 24px rgba(0,0,0,0.22);
+
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Refleksi cahaya */
+        .plate-final::before {
+            content: "";
+            position: absolute;
+            top: 12%;
+            left: 18%;
+            width: 50%;
+            height: 22%;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.28);
+            filter: blur(8px);
+            transform: rotate(-10deg);
+        }
+
+        /* Bayangan bawah */
+        .plate-final::after {
+            content: "";
+            position: absolute;
+            bottom: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 76%;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.18);
+            filter: blur(10px);
+            z-index: -1;
+        }
+
+        /* Inner plate */
+        .plate-final .plate-inner {
+            width: 78%;
+            height: 78%;
+            border-radius: 9999px;
+
+            background:
+                radial-gradient(circle at 30% 30%,
+                #ffffff 0%,
+                #ececec 35%,
+                #d7d7d7 65%,
+                #bfbfbf 100%);
+
+            box-shadow:
+                inset 4px 4px 8px rgba(255,255,255,0.8),
+                inset -4px -4px 8px rgba(0,0,0,0.08);
+        }
+        .gem-source {
+            cursor: grab;
+            transition: transform 0.2s;
+            user-select: none;
+        }
+        .gem-source:active { cursor: grabbing; transform: scale(1.2); }
+
+        .receipt-paper {
+            background: #fff;
+            background-image: radial-gradient(#eee 1px, transparent 1px);
+            background-size: 20px 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            position: relative;
+        }
+        .receipt-paper::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: linear-gradient(-45deg, transparent 8px, #fff 8px), linear-gradient(45deg, transparent 8px, #fff 8px);
+            background-size: 16px 16px;
+        }
+
+        .drop-zone-active {
+            background: rgba(255, 255, 255, 0.2);
+            border: 4px dashed #fbbf24;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+        .animate-pop { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        /* ===== STYLE RUPIAH BANKNOTES ===== */
+        .bill-btn {
+            position: relative;
+            height: 40px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            color: white;
+            box-shadow: 0 3px 4px rgba(0,0,0,0.15), inset 0 -3px 0 rgba(0,0,0,0.2), inset 0 3px 0 rgba(255,255,255,0.15);
+            transition: all 0.1s ease;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .bill-btn:active {
+            transform: translateY(1.5px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 -1.5px 0 rgba(0,0,0,0.2);
+        }
+        .bill-100k { background: linear-gradient(135deg, #f43f5e, #be123c); } /* Merah */
+        .bill-50k  { background: linear-gradient(135deg, #3b82f6, #1d4ed8); } /* Biru */
+        .bill-20k  { background: linear-gradient(135deg, #10b981, #047857); } /* Hijau */
+        .bill-10k  { background: linear-gradient(135deg, #8b5cf6, #6d28d9); } /* Ungu */
+        .bill-5k   { background: linear-gradient(135deg, #f59e0b, #b45309); } /* Kuning/Cokelat */
+        .bill-2k   { background: linear-gradient(135deg, #6b7280, #4b5563); } /* Abu-abu */
+        .bill-1k   { background: linear-gradient(135deg, #84cc16, #4d7c0f); } /* Hijau Daun */
+
+        /* ===== LAS / TORCH ANIMATION STYLE ===== */
+        @keyframes flame-wiggle {
+            0%, 100% { transform: scale(1) rotate(-3deg); filter: drop-shadow(0 0 12px #38bdf8); }
+            50% { transform: scale(1.15) rotate(3deg); filter: drop-shadow(0 0 25px #f59e0b); }
+        }
+        .animate-flame {
+            animation: flame-wiggle 0.08s infinite ease-in-out;
+            transform-origin: bottom center;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col p-4 md:p-6 relative">
+
+    <!-- TOMBOL PENGATURAN MELAYANG (DI LUAR FRAME - POJOK KANAN ATAS) -->
+    <div class="fixed top-4 right-4 z-50">
+        <button onclick="openSettings()" class="bg-black/60 hover:bg-black/80 backdrop-blur-md text-white font-black p-3.5 rounded-full border border-white/20 shadow-xl transition-all duration-300 hover:scale-110 active:scale-95">
+            ⚙️
+        </button>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="max-w-6xl mx-auto w-full flex justify-between items-center bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/10 mb-6 pr-16 sm:pr-4">
+        <div class="flex items-center gap-4">
+            <div class="bg-yellow-500 text-slate-900 font-black px-4 py-1 rounded-lg">LEVEL <span id="level-display">1</span></div>
+            <h1 class="text-white font-bold text-xl uppercase tracking-tighter hidden sm:block">Abang <span class="text-yellow-400">Perhiasan</span></h1>
+        </div>
+        <div class="flex gap-4 items-center">
+            <div id="lives-container" class="flex gap-1 text-2xl">❤️❤️❤️</div>
+            <div class="text-right border-l border-white/10 pl-4">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">Profit</p>
+                <p id="score-display" class="text-green-400 font-black text-2xl">Rp 0</p>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow">
+        
+        <div class="lg:col-span-8 flex flex-col gap-6">
+            
+            <!-- Customer Speech -->
+            <div class="relative overflow-visible">
+                <!-- Avatar Keluar Frame -->
+                <div 
+                    id="customer-avatar"
+                    class="absolute -left-10 -top-6 z-20
+                        w-28 h-28
+                        flex items-center justify-center
+                        rounded-full
+                        border-2 border-white
+                        shadow-2xl
+                        text-6xl"
+                >
+                    <img src="Aset/customer1.png" class="w-full h-full object-cover rounded-full" onerror="this.parentNode.innerHTML='🧑‍💼';">
+                </div>
+
+                <!-- Bubble Chat -->
+                <div class="ml-24 bg-white text-slate-800 p-4 rounded-2xl rounded-tl-none relative shadow-xl">
+                    <!-- Ekor Chat -->
+                    <div class="absolute -left-3 top-4 w-0 h-0 
+                                border-t-[15px] border-t-white 
+                                border-l-[15px] border-l-transparent">
+                    </div>
+
+                    <p class="text-[10px] font-black text-indigo-600 mb-1 uppercase tracking-widest">
+                        Pesanan Baru:
+                    </p>
+
+                    <div id="gem-request" class="text-base font-bold leading-relaxed">
+                        Memuat tantangan...
+                    </div>
+
+                    <p class="text-[10px] text-slate-500 mt-2 italic">
+                        *Geser permata dari piring persediaan ke piring rakitan.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Table Top Area -->
+            <div class="relative overflow-visible flex flex-col md:flex-row items-center justify-around gap-6 flex-grow p-6">
+                
+                <!-- Source Plates (Emas, Perak, Safir, Rubi) -->
+                <div class="flex flex-col gap-4">
+                    <div class="text-center">
+                        <p class="inline-block px-5 py-1.5 mb-6
+                        bg-white/20 backdrop-blur-md
+                        border border-white/30
+                        rounded-full
+                        shadow-lg
+                        text-xs font-black tracking-widest uppercase
+                        text-white">
+                        Persediaan
+                        </p>
+                        <!-- Grid 2x2 yang pas dan presisi -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Gold (Emas) Plate -->
+                            <div class="plate w-24 h-24 md:w-32 md:h-32">
+                                <div id="source-gold" class="plate-inner">
+                                    <!-- Gold SVG will be injected here -->
+                                </div>
+                                <span class="absolute -bottom-2 bg-yellow-500 px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-md">EMAS (Rp 50rb)</span>
+                            </div>
+                            <!-- Silver (Perak) Plate -->
+                            <div class="plate w-24 h-24 md:w-32 md:h-32">
+                                <div id="source-silver" class="plate-inner">
+                                    <!-- Silver SVG will be injected here -->
+                                </div>
+                                <span class="absolute -bottom-2 bg-slate-500 px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-md">PERAK (Rp 20rb)</span>
+                            </div>
+                            <!-- Blue (Safir) Plate -->
+                            <div class="plate w-24 h-24 md:w-32 md:h-32">
+                                <div id="source-blue" class="plate-inner">
+                                    <!-- Blue Sapphire SVG will be injected here -->
+                                </div>
+                                <span class="absolute -bottom-2 bg-blue-600 px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-md">SAFIR (Rp 30rb)</span>
+                            </div>
+                            <!-- Ruby (Rubi) Plate -->
+                            <div class="plate w-24 h-24 md:w-32 md:h-32">
+                                <div id="source-ruby" class="plate-inner">
+                                    <!-- Ruby SVG will be injected here -->
+                                </div>
+                                <span class="absolute -bottom-2 bg-red-600 px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-md">RUBI (Rp 40rb)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Work Area (Target Plate) -->
+                <div class="flex flex-col items-center">
+                    <p class="inline-block px-5 py-1.5 mb-4
+                    bg-white/20 backdrop-blur-md
+                    border border-white/30
+                    rounded-full
+                    shadow-lg
+                    text-xs font-black tracking-widest uppercase
+                    text-white">
+                    Piring Rakitan
+                    (<span id="count-display">0</span>/<span id="total-display">10</span>)
+                </p>
+                    <div id="drop-zone"
+                    ondrop="drop(event)"
+                    ondragover="allowDrop(event)"
+                    class="plate plate-final w-56 h-56 md:w-72 md:h-72 transition-all duration-300 relative overflow-hidden">
+                        <div id="necklace-plate" class="plate-inner">
+                            <!-- Gems will be dropped here -->
+                        </div>
+
+                        <!-- ALAT PEMBAKAR PERHIASAN DAN EFEK API SVG (OVERLAY 3D) -->
+                        <div id="torch-overlay" class="absolute inset-0 z-30 flex items-center justify-center pointer-events-none hidden">
+                            <!-- Semburan Api Las -->
+                            <div id="flame" class="absolute bottom-1/3 left-1/2 -translate-x-1/2 translate-y-12 opacity-0 transition-opacity duration-300">
+                                <svg class="w-20 h-28" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <radialGradient id="flame-grad" cx="50%" cy="85%" r="50%">
+                                            <stop offset="0%" stop-color="#ffffff"/>
+                                            <stop offset="25%" stop-color="#38bdf8"/> <!-- Core api biru -->
+                                            <stop offset="60%" stop-color="#fbbf24"/> <!-- Api kuning/oranye -->
+                                            <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+                                        </radialGradient>
+                                    </defs>
+                                    <path d="M50,150 C15,120 5,80 25,45 C30,35 50,5 50,5 C50,5 70,35 75,45 C95,80 85,120 50,150 Z" fill="url(#flame-grad)" class="animate-flame" />
+                                </svg>
+                            </div>
+                            <!-- Kepala Solder Blowtorch -->
+                            <div id="torch-tool" class="absolute -right-24 top-1/2 -translate-y-1/2 transition-all duration-500 ease-out">
+                                <svg class="w-24 h-24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <g transform="rotate(-35, 50, 50)">
+                                        <!-- Nozzle Kuningan -->
+                                        <path d="M10,40 L40,35 L40,55 L10,50 Z" fill="#b45309" stroke="#78350f" stroke-width="1.5" />
+                                        <rect x="35" y="32" width="10" height="26" rx="2" fill="#d97706" stroke="#78350f" stroke-width="1.5" />
+                                        <!-- Badan Selang Logam Pembakar -->
+                                        <path d="M40,43 L80,32 C84,30 88,34 87,38 L83,72 C82,76 77,78 73,76 L40,53 Z" fill="#334155" stroke="#1e293b" stroke-width="1.5" />
+                                        <!-- Katup Pengaman (Valve) -->
+                                        <circle cx="70" cy="42" r="5" fill="#ef4444" stroke="#b91c1c" />
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="resetNecklace()" class="mt-4 text-[10px] font-black text-gray-400 hover:text-red-400 transition tracking-widest border border-white/20 px-6 py-2 rounded-full uppercase">Bersihkan Piring</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Receipt Sidebar -->
+        <div class="lg:col-span-4 flex flex-col justify-between">
+            <div class="receipt-paper p-5 rounded-t-sm text-slate-800 flex-grow flex flex-col justify-between relative">
+                
+                <!-- BADGE DISKON (POJOK KANAN ATAS NOTA) -->
+                <div id="discount-badge" class="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-md rotate-12 shadow-md hidden">
+                    DISKON 0%
+                </div>
+
+                <div>
+                    <!-- Header -->
+                    <div class="text-center border-b-2 border-dashed border-slate-300 pb-3 mb-4">
+                        <h2 class="font-black text-xl uppercase tracking-tighter">Nota Bengkel</h2>
+                        <p class="text-[9px] font-bold text-slate-400">No Transaksi: #<span id="trans-id">0000</span></p>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="space-y-3 mb-4 text-xs">
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase">Uang Dari Pembeli</p>
+                                <span id="display-payment-given" class="text-base font-bold text-slate-950">Rp 0</span>
+                            </div>
+                        </div>
+
+                        <!-- HARGA RACIKAN DIPOSISIKAN DINAMIS (DISEMBUNYIKAN UNTUK LEVEL 3 KE ATAS, SISA KEMBALIAN SELALU DISEMBUNYIKAN SEKARANG) -->
+                        <div id="dynamic-financials" class="space-y-3 transition-all duration-300">
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <p class="text-[9px] font-bold text-indigo-600 uppercase">Harga Racikan Kalung</p>
+                                    <span id="display-necklace-price" class="text-base font-black text-indigo-700">Rp 0</span>
+                                </div>
+                                <div class="text-right">
+                                    <span id="budget-status" class="bg-emerald-100 text-emerald-800 text-[8px] font-extrabold px-1.5 py-0.5 rounded">AMAN</span>
+                                </div>
+                            </div>
+                            
+                            <!-- TEMPAT PENYIMPANAN DATA SECARA RAHASIA UNTUK KEMBALIAN (SEALED DAN TERSEMBUNYI DI SEMUA LEVEL) -->
+                            <div class="hidden">
+                                <span id="display-change-required">Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cash & Calculator Area -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 mb-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="text-[9px] font-black text-slate-400 uppercase block">Diterima Tunai:</label>
+                            <input type="text" id="cust-payment-val" readonly class="bg-slate-200/80 px-3 py-1 rounded-lg font-black text-center text-sm text-slate-600 w-32 border border-slate-300" value="Rp 0">
+                        </div>
+                        
+                        <!-- Clickable Money System -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-[9px] font-black text-indigo-600 uppercase block">Kembalian Diberikan:</label>
+                                <button onclick="resetChange()" class="text-[9px] font-extrabold text-red-500 hover:text-red-700 uppercase tracking-wider">✕ Reset Uang</button>
+                            </div>
+                            
+                            <!-- Display of Selected Change -->
+                            <div id="change-screen" class="w-full bg-indigo-950 text-emerald-400 p-2.5 rounded-lg border-2 border-indigo-900 font-black text-center text-2xl shadow-inner mb-3">
+                                Rp 0
+                            </div>
+                            
+                            <!-- No-Scroll Bills Grid -->
+                            <p class="text-[8px] font-extrabold text-slate-400 uppercase tracking-widest mb-1.5">Klik pecahan uang kertas untuk membayar:</p>
+                            <div class="grid grid-cols-3 gap-1.5">
+                                <button onclick="addChangeBill(100000)" class="bill-btn bill-100k"><span>100k</span></button>
+                                <button onclick="addChangeBill(50000)" class="bill-btn bill-50k"><span>50k</span></button>
+                                <button onclick="addChangeBill(20000)" class="bill-btn bill-20k"><span>20k</span></button>
+                                <button onclick="addChangeBill(10000)" class="bill-btn bill-10k"><span>10k</span></button>
+                                <button onclick="addChangeBill(5000)" class="bill-btn bill-5k"><span>5k</span></button>
+                                <button onclick="addChangeBill(2000)" class="bill-btn bill-2k"><span>2k</span></button>
+                                <button onclick="addChangeBill(1000)" class="bill-btn bill-1k col-span-3"><span>Rp 1.000</span></button>
+                            </div>
+
+                            <!-- Selected List -->
+                            <div id="chosen-bills-list" class="mt-2 text-[8px] text-slate-400 font-semibold italic truncate">
+                                Belum ada uang pecahan terpilih.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="processTransaction()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-lg shadow-md active:scale-95 transition">
+                    SELESAIKAN ORDER 🛒
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Status -->
+    <div id="status-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden">
+        <div class="bg-white p-10 rounded-[3rem] max-w-sm w-full mx-4 text-center shadow-2xl">
+            <div id="modal-icon" class="text-8xl mb-4">✨</div>
+            <h3 id="modal-title" class="text-3xl font-black text-slate-900 mb-2 uppercase italic">Berhasil!</h3>
+            <p id="modal-body" class="text-slate-500 text-base mb-8">Pekerjaan yang sempurna.</p>
+            <button onclick="closeModal()" class="w-full py-4 bg-indigo-500 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-indigo-600 transition shadow-lg">LANJUTKAN</button>
+        </div>
+    </div>
+
+    <!-- Settings Menu / Dropdown Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm hidden">
+        <div class="bg-white p-8 rounded-[2.5rem] max-w-sm w-full mx-4 text-center shadow-2xl text-slate-800">
+            <div class="text-5xl mb-4">⚙️</div>
+            <h3 class="text-2xl font-black mb-6 uppercase tracking-tight">Menu Pilihan</h3>
+            
+            <div class="space-y-4 mb-8">
+                <!-- Music Control -->
+                <div class="flex justify-between items-center bg-slate-100 p-4 rounded-2xl">
+                    <span class="font-bold">Musik (BGM)</span>
+                    <button id="toggle-bgm" onclick="toggleBGM()" class="px-5 py-2 bg-indigo-600 text-white font-black rounded-xl text-sm transition-all shadow-sm">ON</button>
+                </div>
+                <!-- SFX Control -->
+                <div class="flex justify-between items-center bg-slate-100 p-4 rounded-2xl">
+                    <span class="font-bold">Efek Suara (SFX)</span>
+                    <button id="toggle-sfx" onclick="toggleSFX()" class="px-5 py-2 bg-indigo-600 text-white font-black rounded-xl text-sm transition-all shadow-sm">ON</button>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <button onclick="goToMenu()" class="w-full py-3.5 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-black text-md transition shadow-md flex items-center justify-center gap-2">
+                    <span>Kembali Ke Menu</span>
+                </button>
+                <button onclick="closeSettings()" class="w-full py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-2xl font-bold transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- WEB AUDIO API & LOCAL ASSET BGM ---
+        let audioCtx = null;
+        let isBgmOn = true;
+        let isSfxOn = true;
+
+        // Memanggil langsung berkas audio lokal dari folder aset Anda sendiri
+        let bgmAudio = new Audio('Aset/backsound1.mp3');
+        bgmAudio.loop = true;
+
+        function initAudio() {
+            // Memulai AudioContext untuk sfx sintetis (Web Audio API)
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            
+            // Memulai pemutaran file lokal musik latar
+            if (isBgmOn && bgmAudio.paused) {
+                bgmAudio.play().catch(e => console.log("BGM autoplay tertahan kebijakan browser: ", e));
+            }
+        }
+
+        function playTone(freq, type, duration, startTime, volStart = 0.1) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, startTime);
+                
+                gainNode.gain.setValueAtTime(volStart, startTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                osc.start(startTime);
+                osc.stop(startTime + duration);
+            } catch (e) {
+                console.log("Audio gagal berbunyi", e);
+            }
+        }
+
+        // Triggered SFX calls
+        function playClickSFX() {
+            if (!isSfxOn) return;
+            initAudio();
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
+            playTone(880, 'sine', 0.1, now, 0.12);
+        }
+
+        function playDropSFX() {
+            if (!isSfxOn) return;
+            initAudio();
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.frequency.setValueAtTime(320, now);
+                osc.frequency.exponentialRampToValueAtTime(140, now + 0.15);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+                
+                osc.start(now);
+                osc.stop(now + 0.15);
+            } catch (e) {}
+        }
+
+        function playCashRegisterSFX() {
+            if (!isSfxOn) return;
+            initAudio();
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
+            playTone(1100, 'sine', 0.04, now, 0.08);
+            setTimeout(() => playTone(1450, 'sine', 0.05, audioCtx.currentTime, 0.06), 40);
+        }
+
+        // Efek suara pembakaran (desisan kompor gas las) hasil sintesis Web Audio API
+        function playTorchBurnSFX() {
+            if (!isSfxOn) return;
+            initAudio();
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
+            
+            try {
+                const bufferSize = audioCtx.sampleRate * 1.5;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(1000, now);
+                filter.frequency.exponentialRampToValueAtTime(800, now + 1.5);
+                filter.Q.setValueAtTime(1.5, now);
+                
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.08, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 1.5);
+                
+                noise.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                noise.start(now);
+                noise.stop(now + 1.5);
+            } catch (e) {
+                playTone(200, 'sawtooth', 1.5, now, 0.05);
+            }
+        }
+
+        function playSuccessSFX() {
+            if (!isSfxOn) return;
+            initAudio();
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
+            const arpeggio = [261.63, 329.63, 392.00, 523.25];
+            arpeggio.forEach((freq, idx) => {
+                playTone(freq, 'triangle', 0.35, now + (idx * 0.08), 0.1);
+            });
+        }
+
+        function playFailSFX() {
+            if (!isSfxOn) return;
+            initAudio();
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
+            playTone(180, 'sawtooth', 0.35, now, 0.08);
+            playTone(130, 'sawtooth', 0.45, now + 0.2, 0.1);
+        }
+
+        document.addEventListener('click', () => {
+            initAudio();
+        }, { once: true });
+
+
+        // --- ORIGINAL GAME STATE ---
+        let gameState = {
+            score: 0,
+            lives: 3,
+            level: 1,
+            necklace: [],
+            selectedChangeAmount: 0,
+            selectedChangeBills: [],
+            config: {
+                totalBeads: 10,
+                targetPercent: 50,
+                targetColor: 'gold',
+                basePrice: 0,
+                discountPercent: 0,
+                customerPayment: 0
+            }
+        };
+
+        const colorMap = { gold: 'Emas', silver: 'Perak', blue: 'Safir', ruby: 'Rubi' };
+        const beadPrices = { gold: 50000, silver: 20000, blue: 30000, ruby: 40000 };
+        
+        // ===== PREMIUM VEKTOR SVG CUSTOM ICONS (EMAS, PERAK, SAFIR, RUBI) =====
+        const colorSVG = {
+            gold: `
+                <svg class="w-12 h-12 select-none pointer-events-none drop-shadow-md animate-pop" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,15 75,35 50,85" fill="#f59e0b" />
+                    <polygon points="50,15 25,35 50,85" fill="#fbbf24" />
+                    <polygon points="25,35 15,35 50,85" fill="#d97706" />
+                    <polygon points="75,35 85,35 50,85" fill="#b45309" />
+                    <polygon points="50,15 75,35 85,35" fill="#f59e0b" />
+                    <polygon points="50,15 25,35 15,35" fill="#fef08a" />
+                    <polygon points="40,25 60,25 50,15" fill="#ffffff" opacity="0.8" />
+                </svg>
+            `,
+            silver: `
+                <svg class="w-12 h-12 select-none pointer-events-none drop-shadow-md animate-pop" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,15 75,35 50,85" fill="#cbd5e1" />
+                    <polygon points="50,15 25,35 50,85" fill="#f1f5f9" />
+                    <polygon points="25,35 15,35 50,85" fill="#94a3b8" />
+                    <polygon points="75,35 85,35 50,85" fill="#64748b" />
+                    <polygon points="50,15 75,35 85,35" fill="#e2e8f0" />
+                    <polygon points="50,15 25,35 15,35" fill="#ffffff" />
+                    <polygon points="40,25 60,25 50,15" fill="#ffffff" opacity="0.9" />
+                </svg>
+            `,
+            blue: `
+                <svg class="w-12 h-12 select-none pointer-events-none drop-shadow-md animate-pop" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,15 75,35 50,85" fill="#1d4ed8" />
+                    <polygon points="50,15 25,35 50,85" fill="#60a5fa" />
+                    <polygon points="25,35 15,35 50,85" fill="#1e3a8a" />
+                    <polygon points="75,35 85,35 50,85" fill="#1e1b4b" />
+                    <polygon points="50,15 75,35 85,35" fill="#2563eb" />
+                    <polygon points="50,15 25,35 15,35" fill="#dbeafe" />
+                    <polygon points="40,25 60,25 50,15" fill="#ffffff" opacity="0.7" />
+                </svg>
+            `,
+            ruby: `
+                <svg class="w-12 h-12 select-none pointer-events-none drop-shadow-md animate-pop" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,15 75,35 50,85" fill="#dc2626" />
+                    <polygon points="50,15 25,35 50,85" fill="#f87171" />
+                    <polygon points="25,35 15,35 50,85" fill="#991b1b" />
+                    <polygon points="75,35 85,35 50,85" fill="#7f1d1d" />
+                    <polygon points="50,15 75,35 85,35" fill="#ef4444" />
+                    <polygon points="50,15 25,35 15,35" fill="#fee2e2" />
+                    <polygon points="40,25 60,25 50,15" fill="#ffffff" opacity="0.7" />
+                </svg>
+            `
+        };
+
+        const avatars = ['🧑‍💼', '👩‍💼', '👵', '👳', '👸', '🤴', '👷'];
+
+        initGame();
+
+        function initGame() {
+            let beadOptions, percentOptions;
+
+            // Penentuan skema level
+            if (gameState.level === 1) {
+                beadOptions = [10];
+                percentOptions = [50, 100, 20, 40];
+                gameState.config.discountPercent = 0; // Level 1 tidak ada diskon
+            } else if (gameState.level === 2) {
+                beadOptions = [20];
+                percentOptions = [10, 25, 50, 75];
+                gameState.config.discountPercent = [10, 20][Math.floor(Math.random() * 2)]; // Level 2 diskon 10-20%
+            } else {
+                beadOptions = [25, 40, 50];
+                percentOptions = [10, 20, 30, 40, 50];
+                gameState.config.discountPercent = [10, 20, 30][Math.floor(Math.random() * 3)]; // Level 3+ diskon 10-30%
+            }
+
+            gameState.config.totalBeads = beadOptions[Math.floor(Math.random() * beadOptions.length)];
+            
+            // Validasi persentase butir yang menghasilkan bilangan bulat
+            const validPercents = percentOptions.filter(p => Number.isInteger((p/100) * gameState.config.totalBeads));
+            gameState.config.targetPercent = validPercents[Math.floor(Math.random() * validPercents.length)];
+            
+            const targetChoices = ['gold', 'silver', 'blue', 'ruby'];
+            gameState.config.targetColor = targetChoices[Math.floor(Math.random() * targetChoices.length)];
+
+            // Hitung kalkulasi kemungkinan biaya minimal/maksimal untuk pesanan ini agar anggaran pelanggan realistis
+            const targetQty = (gameState.config.targetPercent / 100) * gameState.config.totalBeads;
+            const targetBeadCost = targetQty * beadPrices[gameState.config.targetColor];
+            const remainingQty = gameState.config.totalBeads - targetQty;
+            
+            // Perak adalah material termurah (20k), Emas termahal (50k)
+            const minPossibleCost = targetBeadCost + (remainingQty * 20000);
+            const maxPossibleCost = targetBeadCost + (remainingQty * 50000);
+
+            // Tentukan uang pembayaran dari pembeli secara acak di antara rentang biaya kalung tersebut
+            let budgetBase = minPossibleCost + Math.floor(Math.random() * (maxPossibleCost - minPossibleCost));
+            // Pembulatan ke pecahan Rp 50.000 terdekat ke atas agar ada sisa uang
+            gameState.config.customerPayment = Math.ceil((budgetBase + 10000) / 50000) * 50000;
+
+            // Reset tumpukan piring
+            gameState.necklace = [];
+            resetChange();
+            
+            // Randomize avatar
+            const avatarWrapper = document.getElementById('customer-avatar');
+            if (avatarWrapper && !avatarWrapper.querySelector('img')) {
+                avatarWrapper.innerText = avatars[Math.floor(Math.random() * avatars.length)];
+            }
+            updateUI();
+        }
+
+        // Hitung total harga racikan kalung saat ini sebelum diskon
+        function calculateNecklacePrice() {
+            return gameState.necklace.reduce((sum, color) => sum + (beadPrices[color] || 0), 0);
+        }
+
+        function updateUI() {
+            document.getElementById('level-display').innerText = gameState.level;
+            document.getElementById('score-display').innerText = `Rp ${gameState.score.toLocaleString('id-ID')}`;
+            document.getElementById('lives-container').innerHTML = '❤️'.repeat(gameState.lives);
+            document.getElementById('trans-id').innerText = Math.floor(Math.random() * 8999) + 1000;
+            document.getElementById('total-display').innerText = gameState.config.totalBeads;
+            document.getElementById('count-display').innerText = gameState.necklace.length;
+
+            const colorText = colorMap[gameState.config.targetColor];
+            const colorClassMap = {
+                gold: 'text-yellow-500',
+                silver: 'text-slate-400',
+                blue: 'text-blue-500',
+                ruby: 'text-red-500'
+            };
+            const colorClass = colorClassMap[gameState.config.targetColor];
+            
+            // Cari jenis barang lainnya untuk pembagi/pengisi piring yang kosong
+            const otherColors = Object.keys(colorMap).filter(c => c !== gameState.config.targetColor);
+
+            // Template mini SVG untuk disematkan dalam penunjuk rincian agar visualisasi tinggi
+            const miniSVGs = {
+                gold: `<svg class="w-4 h-4 inline-block align-middle" viewBox="0 0 100 100" fill="none">${colorSVG.gold.replace('w-12 h-12', 'w-full h-full')}</svg>`,
+                silver: `<svg class="w-4 h-4 inline-block align-middle" viewBox="0 0 100 100" fill="none">${colorSVG.silver.replace('w-12 h-12', 'w-full h-full')}</svg>`,
+                blue: `<svg class="w-4 h-4 inline-block align-middle" viewBox="0 0 100 100" fill="none">${colorSVG.blue.replace('w-12 h-12', 'w-full h-full')}</svg>`,
+                ruby: `<svg class="w-4 h-4 inline-block align-middle" viewBox="0 0 100 100" fill="none">${colorSVG.ruby.replace('w-12 h-12', 'w-full h-full')}</svg>`
+            };
+            
+            const targetMiniSvg = miniSVGs[gameState.config.targetColor];
+            const otherMiniSvgs = otherColors.map(c => miniSVGs[c]).join(' ');
+
+            // Teks pesanan tanpa membocorkan hasil hitungan butir agar dikalkulasi sendiri oleh siswa!
+            document.getElementById('gem-request').innerHTML = `
+                <div class="text-xs font-semibold leading-relaxed">
+                    Tolong buatkan kalung dengan kapasitas total tepat <span class="font-black text-indigo-600 underline">${gameState.config.totalBeads} butir</span> permata.
+                </div>
+                <!-- Kartu Rincian Komposisi Visual -->
+                <div class="mt-2 p-2.5 bg-indigo-50/80 border border-indigo-100 rounded-xl text-[11px] text-indigo-950 shadow-inner flex flex-col gap-1.5">
+                    <div class="flex justify-between items-center border-b border-indigo-100/50 pb-1">
+                        <span class="font-bold flex items-center gap-1">📋 Rencana Perakitan:</span>
+                        <span class="bg-indigo-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded">MATEMATIKA</span>
+                    </div>
+                    <!-- Baris target utama (Hanya Persentase) -->
+                    <div class="flex items-center justify-between">
+                        <span class="flex items-center gap-1">
+                            ${targetMiniSvg} <span class="font-semibold text-slate-700">Permata Utama (${colorText}):</span>
+                        </span>
+                        <span class="font-black ${colorClass} text-xs">${gameState.config.targetPercent}%</span>
+                    </div>
+                    <!-- Baris pengisi sisa -->
+                    <div class="flex items-center justify-between">
+                        <span class="flex items-center gap-1">
+                            <span class="flex gap-0.5">${otherMiniSvgs}</span>
+                            <span class="font-semibold text-slate-500">Pendukung (Bebas Campur):</span>
+                        </span>
+                        <span class="font-bold text-slate-500 text-xs">${100 - gameState.config.targetPercent}%</span>
+                    </div>
+                    <!-- Baris total kapasitas -->
+                    <div class="flex justify-between items-center border-t border-dashed border-indigo-200/60 pt-1 font-black text-indigo-800 text-[10px]">
+                        <span>KAPASITAS PIRING (TOTAL)</span>
+                        <span>${gameState.config.totalBeads} Butir</span>
+                    </div>
+                </div>
+            `;
+
+            // Hitung harga racikan dinamis
+            const necklacePrice = calculateNecklacePrice();
+            const discountPercent = gameState.config.discountPercent;
+            const finalPrice = necklacePrice * (1 - discountPercent / 100);
+
+            // Perbarui status diskon di pojok kanan atas nota
+            const discountBadge = document.getElementById('discount-badge');
+            if (discountPercent > 0) {
+                discountBadge.innerText = `DISKON ${discountPercent}%`;
+                discountBadge.classList.remove('hidden');
+            } else {
+                discountBadge.classList.add('hidden');
+            }
+
+            // Tampilkan Harga Racikan hanya pada Level 1 & Level 2 (Sisa kembalian sudah disembunyikan permanen untuk semua level)
+            const dynamicFinancials = document.getElementById('dynamic-financials');
+            if (gameState.level <= 2) {
+                dynamicFinancials.classList.remove('hidden');
+            } else {
+                dynamicFinancials.classList.add('hidden');
+            }
+
+            // Render komponen nota penjualan secara dinamis
+            document.getElementById('display-payment-given').innerText = `Rp ${gameState.config.customerPayment.toLocaleString('id-ID')}`;
+            document.getElementById('display-necklace-price').innerText = `Rp ${necklacePrice.toLocaleString('id-ID')}`;
+            
+            // Perbarui status anggaran (menggunakan harga final setelah diskon)
+            const budgetStatusEl = document.getElementById('budget-status');
+            if (finalPrice <= gameState.config.customerPayment) {
+                budgetStatusEl.innerText = "AMAN";
+                budgetStatusEl.className = "bg-emerald-100 text-emerald-800 text-[8px] font-extrabold px-1.5 py-0.5 rounded";
+            } else {
+                budgetStatusEl.innerText = "OVER BUDGET";
+                budgetStatusEl.className = "bg-rose-100 text-rose-800 text-[8px] font-extrabold px-1.5 py-0.5 rounded";
+            }
+
+            // Hitung sisa kembalian seharusnya (disembunyikan namun tetap perlu kalkulasi logis untuk validasi JS)
+            const changeRequired = Math.max(0, gameState.config.customerPayment - finalPrice);
+            document.getElementById('display-change-required').innerText = `Rp ${changeRequired.toLocaleString('id-ID')}`;
+            
+            // Render uang yang diterima dari pembeli
+            document.getElementById('cust-payment-val').value = `Rp ${gameState.config.customerPayment.toLocaleString('id-ID')}`;
+
+            // Inject the premium SVG icons into supply plates
+            document.getElementById('source-gold').innerHTML = `<div draggable="true" ondragstart="drag(event, 'gold')" class="gem-source hover:scale-110 active:scale-125 transition-transform duration-250">${colorSVG.gold}</div>`;
+            document.getElementById('source-silver').innerHTML = `<div draggable="true" ondragstart="drag(event, 'silver')" class="gem-source hover:scale-110 active:scale-125 transition-transform duration-250">${colorSVG.silver}</div>`;
+            document.getElementById('source-blue').innerHTML = `<div draggable="true" ondragstart="drag(event, 'blue')" class="gem-source hover:scale-110 active:scale-125 transition-transform duration-250">${colorSVG.blue}</div>`;
+            document.getElementById('source-ruby').innerHTML = `<div draggable="true" ondragstart="drag(event, 'ruby')" class="gem-source hover:scale-110 active:scale-125 transition-transform duration-250">${colorSVG.ruby}</div>`;
+
+            renderNecklace();
+        }
+
+        // --- INTERACTIVE BILLS LOGIC ---
+        function addChangeBill(amount) {
+            playCashRegisterSFX();
+            gameState.selectedChangeAmount += amount;
+            gameState.selectedChangeBills.push(amount);
+            updateChangeUI();
+        }
+
+        function resetChange() {
+            playClickSFX();
+            gameState.selectedChangeAmount = 0;
+            gameState.selectedChangeBills = [];
+            updateChangeUI();
+        }
+
+        function updateChangeUI() {
+            const screen = document.getElementById('change-screen');
+            screen.innerText = `Rp ${gameState.selectedChangeAmount.toLocaleString('id-ID')}`;
+            
+            const listContainer = document.getElementById('chosen-bills-list');
+            if (gameState.selectedChangeBills.length === 0) {
+                listContainer.innerText = "Belum ada uang pecahan terpilih.";
+            } else {
+                const counts = {};
+                gameState.selectedChangeBills.forEach(b => counts[b] = (counts[b] || 0) + 1);
+                
+                const billTexts = Object.keys(counts).sort((a,b) => b-a).map(val => {
+                    const formattedVal = parseInt(val).toLocaleString('id-ID');
+                    return `[Rp ${formattedVal} x${counts[val]}]`;
+                });
+                listContainer.innerText = "Uang diberikan: " + billTexts.join(", ");
+            }
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            document.getElementById('drop-zone').classList.add('drop-zone-active');
+        }
+
+        function drag(ev, color) {
+            playClickSFX();
+            ev.dataTransfer.setData("color", color);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            document.getElementById('drop-zone').classList.remove('drop-zone-active');
+            const color = ev.dataTransfer.getData("color");
+            
+            if (gameState.necklace.length < gameState.config.totalBeads) {
+                playDropSFX();
+                gameState.necklace.push(color);
+                updateUI();
+            }
+        }
+
+        function renderNecklace() {
+            const container = document.getElementById('necklace-plate');
+            container.innerHTML = '';
+            gameState.necklace.forEach(color => {
+                const gemWrapper = document.createElement('div');
+                gemWrapper.className = "w-10 h-10 flex items-center justify-center animate-pop";
+                gemWrapper.innerHTML = colorSVG[color];
+                container.appendChild(gemWrapper);
+            });
+        }
+
+        function resetNecklace() {
+            playClickSFX();
+            gameState.necklace = [];
+            updateUI();
+        }
+
+        // --- LASER / BLOWTORCH ANIMATION CONTROL ---
+        function triggerTorchAnimation(callback) {
+            const overlay = document.getElementById('torch-overlay');
+            const tool = document.getElementById('torch-tool');
+            const flame = document.getElementById('flame');
+            
+            overlay.classList.remove('hidden');
+            
+            // Luncurkan alat las masuk ke piring rakitan
+            setTimeout(() => {
+                tool.style.right = '10px';
+                
+                // Nyalakan semburan api las & desisan audio
+                setTimeout(() => {
+                    flame.classList.remove('opacity-0');
+                    playTorchBurnSFX();
+                    
+                    // Lakukan pembakaran selama 1,5 detik
+                    setTimeout(() => {
+                        flame.classList.add('opacity-0');
+                        tool.style.right = '-120px'; // Tarik kembali alat las
+                        
+                        setTimeout(() => {
+                            overlay.classList.add('hidden');
+                            callback();
+                        }, 500);
+                    }, 1500);
+                }, 500);
+            }, 50);
+        }
+
+        function processTransaction() {
+            if (gameState.necklace.length < gameState.config.totalBeads) {
+                playFailSFX();
+                showModal("BELUM SELESAI", "Jumlah permata di piring belum lengkap!", "⚠️");
+                return;
+            }
+
+            const targetQty = (gameState.config.targetPercent / 100) * gameState.config.totalBeads;
+            const actualQty = gameState.necklace.filter(c => c === gameState.config.targetColor).length;
+            const isGemsCorrect = targetQty === actualQty;
+
+            const necklacePrice = calculateNecklacePrice();
+            const discountPercent = gameState.config.discountPercent;
+            const finalNecklacePrice = necklacePrice * (1 - discountPercent / 100);
+            const correctChange = gameState.config.customerPayment - finalNecklacePrice;
+
+            // Evaluasi 1: Verifikasi komposisi fisis permata
+            if (!isGemsCorrect) {
+                playFailSFX();
+                gameState.lives--;
+                let msg = `• Komposisi permata salah. Seharusnya ada ${targetQty} butir ${colorMap[gameState.config.targetColor]}.`;
+                
+                if (gameState.lives <= 0) {
+                    showModal("GAME OVER 💀", "Toko bangkrut karena terlalu banyak membuat kesalahan komposisi.", "❌");
+                    gameState.score = 0;
+                    gameState.lives = 3;
+                    gameState.level = 1;
+                } else {
+                    showModal("SALAH! 😿", msg, "💔");
+                }
+                initGame();
+                return;
+            }
+
+            // Evaluasi 2: Verifikasi Anggaran (Harus di bawah/sama dengan uang pembeli setelah diskon)
+            if (finalNecklacePrice > gameState.config.customerPayment) {
+                playFailSFX();
+                const loss = finalNecklacePrice - gameState.config.customerPayment;
+                gameState.score -= loss;
+                if (gameState.score < 0) gameState.score = 0; // Cegah score minus
+                
+                showModal("HARGA MELEBIHI UANG PEMBELI! 💸", `Kerugian terdeteksi! Harga setelah diskon (Rp ${finalNecklacePrice.toLocaleString('id-ID')}) melebihi uang pembeli (Rp ${gameState.config.customerPayment.toLocaleString('id-ID')}). Profit Anda berkurang Rp ${loss.toLocaleString('id-ID')}!`, "⚠️");
+                initGame();
+                return;
+            }
+
+            // Evaluasi 3: Verifikasi Kembalian Keuangan
+            if (gameState.selectedChangeAmount === correctChange) {
+                // KASUS IDEAL: Komposisi Benar, Di bawah Budget & Kembalian Tepat -> Sukses Solder perhiasan!
+                triggerTorchAnimation(() => {
+                    playSuccessSFX();
+                    gameState.score += necklacePrice; // Profit adalah murni Harga Racikan Kalung sebelum diskon
+                    
+                    let leveledUp = false;
+                    if (gameState.score >= gameState.level * 1000000) {
+                        gameState.level++;
+                        leveledUp = true;
+                    }
+                    showModal(leveledUp ? "NAIK LEVEL! 🚀" : "BERHASIL! ✨", `Sempurna! Perhiasan dilelehkan dengan kokoh & kembalian akurat! Kamu memperoleh profit sebesar Rp ${necklacePrice.toLocaleString('id-ID')}.`, "💰");
+                    initGame();
+                });
+                
+            } else if (gameState.selectedChangeAmount > correctChange) {
+                // KASUS KELEBIHAN: Kembalian kelebihan -> Mengurangi profit
+                playFailSFX();
+                const overpaidAmount = gameState.selectedChangeAmount - correctChange;
+                gameState.score -= overpaidAmount;
+                if (gameState.score < 0) gameState.score = 0;
+                
+                showModal("KEMBALIAN BERLEBIH! 💸", `Kembalian yang kamu berikan kelebihan Rp ${overpaidAmount.toLocaleString('id-ID')}! Profit toko kamu dipotong untuk menutup selisih kerugian, namun kalung tetap sukses terjual.`, "⚠️");
+                initGame();
+                
+            } else {
+                // KASUS KEKURANGAN: Kembalian kurang -> Pelanggan kesal, membatalkan transaksi (tidak jadi beli) & mengurangi nyawa
+                playFailSFX();
+                gameState.lives--;
+                const underpaidAmount = correctChange - gameState.selectedChangeAmount;
+                
+                if (gameState.lives <= 0) {
+                    showModal("GAME OVER 💀", `Kembalian kurang sebesar Rp ${underpaidAmount.toLocaleString('id-ID')}. Pelanggan marah, membatalkan pembelian, dan reputasi tokomu hancur total!`, "❌");
+                    gameState.score = 0;
+                    gameState.lives = 3;
+                    gameState.level = 1;
+                } else {
+                    showModal("TIDAK JADI BELI! 😡", `Kembalian kurang Rp ${underpaidAmount.toLocaleString('id-ID')}! Pelanggan tidak mau menerima kembalian kurang, membatalkan semua pesanannya, dan pergi begitu saja. Nyawa berkurang!`, "💔");
+                }
+                initGame();
+            }
+        }
+
+        // --- OPTION/SETTINGS FUNCTIONS ---
+        function openSettings() {
+            playClickSFX();
+            document.getElementById('settings-modal').classList.remove('hidden');
+        }
+
+        function closeSettings() {
+            playClickSFX();
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function toggleBGM() {
+            isBgmOn = !isBgmOn;
+            const btn = document.getElementById('toggle-bgm');
+            btn.innerText = isBgmOn ? 'ON' : 'OFF';
+            btn.className = isBgmOn 
+                ? 'px-5 py-2 bg-indigo-600 text-white font-black rounded-xl text-sm transition-all shadow-sm'
+                : 'px-5 py-2 bg-slate-400 text-white font-black rounded-xl text-sm transition-all shadow-sm';
+            
+            if (isBgmOn) {
+                bgmAudio.play().catch(e => console.log(e));
+            } else {
+                bgmAudio.pause();
+            }
+            playClickSFX();
+        }
+
+        function toggleSFX() {
+            isSfxOn = !isSfxOn;
+            const btn = document.getElementById('toggle-sfx');
+            btn.innerText = isSfxOn ? 'ON' : 'OFF';
+            btn.className = isSfxOn 
+                ? 'px-5 py-2 bg-indigo-600 text-white font-black rounded-xl text-sm transition-all shadow-sm'
+                : 'px-5 py-2 bg-slate-400 text-white font-black rounded-xl text-sm transition-all shadow-sm';
+            playClickSFX();
+        }
+
+        function goToMenu() {
+            playClickSFX();
+            bgmAudio.pause();
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 100);
+        }
+
+        function showModal(title, body, icon) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = body;
+            document.getElementById('modal-icon').innerText = icon;
+            document.getElementById('status-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            playClickSFX();
+            document.getElementById('status-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
